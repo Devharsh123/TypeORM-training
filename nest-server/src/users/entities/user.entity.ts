@@ -1,5 +1,5 @@
 import Cart from "src/cart/entities/cart.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 
 export enum userRole {
     ADMIN = 'admin',
@@ -23,7 +23,9 @@ class User {
     @Column()
     public name: string;
 
-    @Column()
+    @Column({
+        unique: true
+    })
     public email: string;
 
     @Column()

@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserData, UserWithBalance } from 'src/users/create.transaction';
 
 @Controller('users')
 export class UsersController {
@@ -31,5 +32,10 @@ export class UsersController {
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Post('createconsumer')
+  createConsumer(@Body() data: UserData): Promise<UserWithBalance> {
+    return this.usersService.createUser(data);
   }
 }

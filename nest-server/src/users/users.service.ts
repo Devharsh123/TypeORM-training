@@ -5,9 +5,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import User from './entities/user.entity';
 import { HttpException } from '@nestjs/common';
+import { CreateTransaction, UserData, UserWithBalance } from 'src/users/create.transaction';
+
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private userRespository: Repository<User>){}
+  constructor(
+    @InjectRepository(User) private userRespository: Repository<User>,
+    private readonly createTransaction: CreateTransaction
+    ){}
+
   async create(createUserDto: CreateUserDto): Promise<any> {
     const user = await this.userRespository.create(createUserDto);
     await this.userRespository.save(user);
@@ -50,5 +56,10 @@ export class UsersService {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
     return `this action removes a #${id} user`;
+  }
+
+  async createUser(user: UserData): Promise<UserWithBalance> {
+    const createUserData = await this.createTransaction.run(user);
+    return createUserData;
   }
 }

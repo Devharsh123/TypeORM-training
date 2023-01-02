@@ -36,6 +36,9 @@ export class CartService {
       throw new HttpException('cart not found',HttpStatus.NOT_FOUND);
     }
     const toggleResponse = await this.cartRepository.update({id: cart[0].id},{isPurchased: !cart[0].isPurchased})
+    if(!toggleResponse.affected){
+      throw new HttpException('updation error',HttpStatus.BAD_REQUEST);
+    }
     return !cart[0].isPurchased;
   }
 
